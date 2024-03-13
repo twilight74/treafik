@@ -1,0 +1,43 @@
+http:
+  routers:
+    web-router:
+      service: web-service
+      middlewares:
+        - "del-hi"
+      rule: "Host(`treafic.interships.site`) && Path(`/hi`)"
+      entryPoints:
+        - web
+
+  middlewares:
+    del-hi:
+      stripPrefix:
+        prefixes:
+          - "/hi"
+        forceSlash: false
+  
+  services:
+    web-service:
+      failover:
+        healthcheck: {}
+        service : main
+        fallback: backup
+
+    main:
+      loadBalancer:
+        servers:
+          - url: "http://web1/hi"
+          - url: "http://web2/hi"
+        healthcheck:
+          path: "/healthcheck"
+          interval: 10s
+          timeout: 2s
+    backup:
+      loadbalancer:
+        servers:
+          - url: "http://web3"
+        healthcheck:
+          path: "https://google.com"
+          interval: 10s
+          timeout: 3  
+    
+  
