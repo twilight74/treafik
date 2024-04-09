@@ -2,18 +2,10 @@ http:
   routers:
     web-router:
       service: web-service
-      middlewares:
-        - "del-hi"
-      rule: "Host(`treafic.interships.site`) && Path(`/hi`)"
+      rule: "Host(`aleni.arrowd81.ir`)"
       entryPoints:
         - web
 
-  middlewares:
-    del-hi:
-      stripPrefix:
-        prefixes:
-          - "/hi"
-        forceSlash: false
   
   services:
     web-service:
@@ -25,8 +17,8 @@ http:
     main:
       loadBalancer:
         servers:
-          - url: "http://web1/hi"
-          - url: "http://web2/hi"
+          - url: "http://web1"
+          - url: "http://web2"
         healthcheck:
           path: "/healthcheck"
           interval: 10s
